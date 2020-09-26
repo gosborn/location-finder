@@ -1,0 +1,23 @@
+version: '3'
+services:
+
+  db:
+    image: postgres:10-alpine
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_HOST_AUTH_METHOD=trust
+
+  api:
+    depends_on:
+      - db
+    build: ./api
+    container_name: api
+    entrypoint: ["/api/docker-entrypoint.sh"]
+    command: ["rails","server","-b","0.0.0.0","-p","3000"]
+    volumes:
+      - ./api:/api
+    ports:
+      - 3000:3000
+    environment:
+      - DATABASE_HOST=db
