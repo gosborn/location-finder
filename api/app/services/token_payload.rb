@@ -2,12 +2,14 @@ class TokenPayload
   attr_accessor :expires_at, :issuer, :user_id
   attr_writer :error
 
-  VALIDATIONS = {
-      issuer_incorrect?: 'Token invalid',
-      expired?: 'Token expired',
-  }
+  private_class_method :token_defaults, :token_issuer
 
-  def initialize(payload={})
+  VALIDATIONS = {
+    issuer_incorrect?: 'Token invalid'.freeze,
+    expired?: 'Token expired'.freeze
+  }.freeze
+
+  def initialize(payload = {})
     @expires_at = payload['expires_at']
     @issuer = payload['issuer']
     @user_id = payload['user_id']
@@ -19,17 +21,19 @@ class TokenPayload
 
   def error
     return @error unless @error.nil?
-    validation_issue = VALIDATIONS.keys.find{|validation| send(validation)}
+
+    validation_issue = VALIDATIONS.keys.find { |validation| send(validation) }
     @error ||= VALIDATIONS[validation_issue]
   end
 
   def self.new_for_user(user)
-    self.token_defaults.merge!(user_id: user.id)
+    token_defaults.merge!(user_id: user.id)
   end
 
   private
+
   def user
-    User.find_by(id: user_id)
+    User.find(user_id)
   end
 
   def issuer_incorrect?
@@ -46,8 +50,8 @@ class TokenPayload
 
   def self.token_defaults
     {
-        expires_at: 10.minutes.from_now.to_i,
-        issuer: token_issuer
+      expires_at: 10.minutes.from_now.to_i,
+      issuer: token_issuer
     }
   end
 end
