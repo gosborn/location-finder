@@ -1,13 +1,11 @@
 class TokenAuthority
 
   def self.issue_token_to_user(user)
-    JWT.encode(TokenPayload.new_for_user(user), secret)
+    JWT.encode(TokenPayload.new_for_user(user), token_secret)
   end
 
   def self.decode_token(token)
     TokenPayload.new(JWT.decode(token, token_secret).first)
-  rescue
-    TokenPayload.new
   end
 
   private

@@ -3,16 +3,11 @@ class ApplicationController < ActionController::API
   protected
 
   def authenticate_request!
-    if !payload || !payload.is_valid?
-      return invalid_authentication
-    end
-
-    load_current_user!
-    invalid_authentication unless @current_user
+    invalid_authentication unless load_current_user!
   end
 
   def invalid_authentication
-    render json: {error: 'Invalid Request'}, status: :unauthorized
+    render json: { error: payload.error }, status: :unauthorized
   end
 
   private
@@ -25,11 +20,11 @@ class ApplicationController < ActionController::API
     token = auth_header.split(' ').last
     TokenAuthority.decode_token(token)
   rescue
-    nil
+    TokenPayload.new
   end
 
   def load_current_user!
-    @current_user ||= payload.user
+    @current_user ||= payload.valid_user
   end
 end
 
