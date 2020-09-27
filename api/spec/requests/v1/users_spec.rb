@@ -7,7 +7,7 @@ describe 'users requests', type: :request do
 
     context 'without headers' do
       it "returns unauthorized without proper headers" do
-        get v1_profile_url, :headers => headers
+        get v1_profile_url
         expect(response).to have_http_status(:unauthorized)
       end
     end
