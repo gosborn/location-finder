@@ -2,8 +2,6 @@ class TokenPayload
   attr_accessor :expires_at, :issuer, :user_id
   attr_writer :error
 
-  private_class_method :token_defaults, :token_issuer
-
   VALIDATIONS = {
     issuer_incorrect?: 'Token invalid'.freeze,
     expired?: 'Token expired'.freeze
@@ -26,10 +24,6 @@ class TokenPayload
     @error ||= VALIDATIONS[validation_issue]
   end
 
-  def self.new_for_user(user)
-    token_defaults.merge!(user_id: user.id)
-  end
-
   private
 
   def user
@@ -44,14 +38,22 @@ class TokenPayload
     expires_at.nil? || Time.at(expires_at) < Time.now
   end
 
-  def self.token_issuer
-    ENV.fetch('TOKEN_ISSUER')
-  end
+  class << self
+    def new_for_user(user)
+      token_defaults.merge!(user_id: user.id)
+    end
 
-  def self.token_defaults
-    {
-      expires_at: 10.minutes.from_now.to_i,
-      issuer: token_issuer
-    }
+    def token_issuer
+      ENV.fetch('TOKEN_ISSUER')
+    end
+
+    private
+
+    def token_defaults
+      {
+          expires_at: 10.minutes.from_now.to_i,
+          issuer: token_issuer
+      }
+    end
   end
 end
