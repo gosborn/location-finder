@@ -1,4 +1,4 @@
-class UsersController < ApplicationController
+class V1::UsersController < ApplicationController
   before_action :authenticate_request!, except: %i[create login]
 
   def login
