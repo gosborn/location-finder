@@ -2,7 +2,7 @@ class V1::LocationsController < AuthorizedController
   before_action :set_location, only: [:show]
 
   def show
-    render json: @location
+    render json: LocationSerializer.new(@location).serializable_hash
   end
 
   private

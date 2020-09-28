@@ -26,10 +26,14 @@ describe 'locations requests', type: :request do
       end
 
       describe 'response body' do
-        example { expect(JSON.parse(subject.body)['description']).to eq(location.description) }
-        example { expect(JSON.parse(subject.body)['name']).to eq(location.name) }
-        example { expect(JSON.parse(subject.body)['latitude']).to be_nil }
-        example { expect(JSON.parse(subject.body)['longitude']).to be_nil }
+        it 'should contain name, description, but not location info' do
+          data = JSON.parse(subject.body)['data']['attributes']
+
+          expect(data['name']).to eq(location.name)
+          expect(data['description']).to eq(location.description)
+          expect(data['longitude']).to be_nil
+          expect(data['latitude']).to be_nil
+        end
       end
     end
   end

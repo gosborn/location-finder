@@ -25,7 +25,14 @@ describe 'users requests', type: :request do
       end
 
       describe 'response body' do
-        example { expect(JSON.parse(subject.body)['email']).to eq(user.email) }
+        it 'should contain name, description, but not location info' do
+          data = JSON.parse(subject.body)['data']['attributes']
+
+          expect(data['email']).to eq(user.email)
+          expect(data['password']).to be_nil
+          #fast_jsonapi serializer changes date format slightly
+          expect(data['created_at'][0..9]).to eq(user.created_at.to_s[0..9])
+        end
       end
     end
   end
