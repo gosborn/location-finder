@@ -5,3 +5,19 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+
+User.create_or_find_by(email: 'test@example.com', password: 'password1234')
+
+Location.create_or_find_by(
+    name: 'Frick Park - Nine Mile Run Trail',
+    description: 'Near the bridge',
+    latitude: 40.419597,
+    longitude: -70.912633
+)
+
+Location.create_or_find_by(
+    name: 'Hazelwood Greenway',
+    description: 'Behind the radio towers',
+    latitude: 40.411700,
+    longitude: -70.931582
+)

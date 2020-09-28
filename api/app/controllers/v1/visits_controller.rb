@@ -10,11 +10,11 @@ class V1::VisitsController < AuthorizedController
   end
 
   def create
-    visit_params.merge! user_id: @current_user.id
-    @visit = Visit.new(visit_params)
+    params = visit_params.merge user: @current_user
+    @visit = Visit.new(params)
 
     if @visit.save
-      render json: @visit, status: :created, location: @visit
+      render json: @visit, status: :created
     else
       render json: @visit.errors, status: :unprocessable_entity
     end

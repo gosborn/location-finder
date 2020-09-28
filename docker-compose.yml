@@ -8,9 +8,13 @@ services:
     environment:
       - POSTGRES_HOST_AUTH_METHOD=trust
 
+  redis:
+    image: redis:5.0.7
+
   api:
     depends_on:
       - db
+      - redis
     build: ./api
     container_name: api
     entrypoint: ["/api/docker-entrypoint.sh"]
@@ -21,3 +25,13 @@ services:
       - 3000:3000
     environment:
       - DATABASE_HOST=db
+
+  sidekiq:
+    build: ./api
+    depends_on:
+      - api      
+      - db
+      - redis
+    volumes:
+      - ./api:/api
+    entrypoint: ["/api/sidekiq-entrypoint.sh"]
