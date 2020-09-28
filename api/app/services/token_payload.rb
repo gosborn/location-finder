@@ -8,6 +8,7 @@ class TokenPayload
   }.freeze
 
   def initialize(payload = {})
+    payload = payload.with_indifferent_access
     @expires_at = payload['expires_at']
     @issuer = payload['issuer']
     @user_id = payload['user_id']
@@ -46,8 +47,6 @@ class TokenPayload
     def token_issuer
       ENV.fetch('TOKEN_ISSUER')
     end
-
-    private
 
     def token_defaults
       {
