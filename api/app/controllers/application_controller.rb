@@ -12,7 +12,7 @@ class ApplicationController < ActionController::API
   private
 
   def token_payload
-    @payload ||= TokenAuthority.decode_from_request request
+    @token_payload ||= TokenAuthority.decode_from_request request
   end
   
   def current_user

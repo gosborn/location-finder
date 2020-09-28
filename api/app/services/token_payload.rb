@@ -50,8 +50,8 @@ class TokenPayload
 
     def token_defaults
       {
-          expires_at: 10.minutes.from_now.to_i,
-          issuer: token_issuer
+        expires_at: 10.minutes.from_now.to_i,
+        issuer: token_issuer
       }
     end
   end
