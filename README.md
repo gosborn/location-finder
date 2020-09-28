@@ -136,12 +136,11 @@ curl -X POST \
 
 ## Code linting
 
-This project uses [Rubocop](https://github.com/bbatsov/rubocop) to check the style of the code. Run by typing `rubocop` in the directory of the project.
+This project uses [Rubocop](https://github.com/bbatsov/rubocop) to check code style. Run by typing `rubocop` in the directory of the project. In a docker configuration run `docker exec -it api rubocop` with the containers up and running.
 
 ## Testing
 
-This project uses rspec for test cases. Run by typing `rspec` to recursively run all test suites.
-
+This project uses rspec for test cases. Run by typing `rspec` to recursively run all test suites. In a docker configuration run `docker exec -it api rspec` with the containers up and running.
 
 ## Roadmap / TODO
 
