@@ -1,4 +1,4 @@
-class VisitsController < AuthorizedController
+class V1::VisitsController < AuthorizedController
   before_action :set_visit, only: [:show]
 
   def index

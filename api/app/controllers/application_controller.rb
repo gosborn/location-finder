@@ -6,24 +6,16 @@ class ApplicationController < ActionController::API
   end
 
   def invalid_authentication
-    render json: { error: payload.error }, status: :unauthorized
+    render json: { error: token_payload.error }, status: :unauthorized
   end
 
   private
 
-  def payload
-    @payload ||= payload_from_request
+  def token_payload
+    @token_payload ||= TokenAuthority.decode_from_request request
   end
-
-  def payload_from_request
-    auth_header = request.headers['Authorization']
-    token = auth_header.split(' ').last
-    TokenAuthority.decode_token(token)
-  rescue
-    TokenPayload.new
-  end
-
+  
   def current_user
-    @current_user ||= payload.valid_user
+    @current_user ||= token_payload.valid_user
   end
 end
