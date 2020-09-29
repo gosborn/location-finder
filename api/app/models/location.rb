@@ -7,9 +7,6 @@ class Location < ApplicationRecord
   private
 
   def recalculate_geocode
-    if latitude_changed? || longitude_changed? || latlng.nil?
-      puts "doing stuff"
-      self.latlng = "POINT (#{longitude} #{latitude})"
-    end
+    PointGeocoder.new(self, :latitude, :longitude, :latlng).geocode_point
   end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_28_232228) do
+ActiveRecord::Schema.define(version: 2020_09_29_144252) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -45,6 +45,7 @@ ActiveRecord::Schema.define(version: 2020_09_28_232228) do
     t.uuid "location_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.geography "latlng", limit: {:srid=>4326, :type=>"st_point", :geographic=>true}
     t.index ["location_id"], name: "index_visits_on_location_id"
     t.index ["user_id"], name: "index_visits_on_user_id"
   end
