@@ -10,11 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_27_165221) do
+ActiveRecord::Schema.define(version: 2020_09_28_232228) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
+  enable_extension "postgis"
 
   create_table "locations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name"
@@ -23,6 +24,7 @@ ActiveRecord::Schema.define(version: 2020_09_27_165221) do
     t.decimal "longitude", precision: 10, scale: 6
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.geography "latlng", limit: {:srid=>4326, :type=>"st_point", :geographic=>true}
     t.index ["name"], name: "index_locations_on_name", unique: true
   end
 
