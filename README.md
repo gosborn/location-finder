@@ -140,7 +140,7 @@ This project uses [Rubocop](https://github.com/bbatsov/rubocop) to check code st
 
 ## Testing
 
-This project uses rspec for test cases. Run by typing `rspec` to recursively run all test suites. In a docker configuration run `docker exec -it api rspec` with the containers up and running.
+This project uses rspec for test cases. Run by typing `bundle exec rspec` to recursively run all test suites. In a docker configuration run `docker exec -it api bundle exec rspec` with the containers up and running.
 
 ## Roadmap / TODO
 
