@@ -9,18 +9,16 @@ class Visit < ApplicationRecord
     expired: 'expired'
   }
 
+  after_initialize do |visit|
+    visit.status ||= 'pending'
+  end
+
   before_validation :recalculate_geocode
   before_save :calculate_status
 
   after_save :recalculate_location
 
   METERS_IN_HALF_MILE = 402.336
-
-  def recalculate_location
-    return unless (location.visits.count % 3).zero?
-
-    CalculateLocationLatLngJob.perform_later location.id
-  end
 
   private
 
@@ -29,15 +27,19 @@ class Visit < ApplicationRecord
   end
 
   def calculate_status
-    status = self.status || 'pending'
-    if latlng.present? && location.latlng.present?
-      if location.latlng.distance(latlng).between?(0, METERS_IN_HALF_MILE)
-        status = 'confirmed'
-      end
-      if location.latlng.distance(latlng) > METERS_IN_HALF_MILE
-        status = 'flagged'
-      end
-    end
-    self.status = status
+    return unless can_calculate_status
+
+    meters_away_from_location = location.latlng.distance(latlng)
+    self.status = meters_away_from_location.between?(0, METERS_IN_HALF_MILE) ? 'confirmed' : 'flagged'
+  end
+
+  def can_calculate_status
+    latlng.present? && location&.latlng.present?
+  end
+
+  def recalculate_location
+    return unless (location.visits.count % 3).zero?
+
+    CalculateLocationLatLngJob.perform_later location.id
   end
 end

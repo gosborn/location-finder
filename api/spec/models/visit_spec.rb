@@ -8,7 +8,6 @@ describe Visit, type: :model do
     let(:far_visit) { create :visit, location: location, user: user, latitude: 10, longitude: 10 }
     let(:locationless_visit) { create :visit, location: location, user: user, latitude: nil, longitude: nil }
 
-
     it 'should validate near visits' do
       expect(near_visit.status).to eq('confirmed')
     end
